@@ -8,12 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost } from "../../actions/posts";
 
 import useStyles from "./stylesForm";
+import { useNavigate } from "react-router-dom";
 
 // Get current id of posts
 
 const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // getting the user from local storage
   const user = JSON.parse(localStorage.getItem("profile"));
 
@@ -25,10 +27,16 @@ const Form = ({ currentId, setCurrentId }) => {
     selectedFile: "",
   });
 
+  // NOTE
   // fetching post with a specific id
   const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null
+    currentId ? state?.posts?.posts?.find((p) => p._id === currentId) : null
   );
+
+  // const temp = useSelector((state) => (currentId ? state : null));
+
+  console.log("FORM");
+  console.log(post);
 
   //when post value changes, fill values in form with data from post
   useEffect(() => {
@@ -40,7 +48,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
     if (currentId === 0) {
       // dispatch(updatePost(currentId, postData));
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      dispatch(createPost({ ...postData, name: user?.result?.name }), navigate);
     } else {
       // dispatch(createPost(postData));
       dispatch(
@@ -120,7 +128,12 @@ const Form = ({ currentId, setCurrentId }) => {
           fullWidth
           value={postData.tags}
           onChange={(e) =>
-            setPostData({ ...postData, tags: e.target.value.split(",") })
+            setPostData({
+              ...postData,
+              tags: e.target.value.split(",").map((tag) => {
+                return tag.trim();
+              }),
+            })
           }
         />
         <div className={classes.fileInput}>

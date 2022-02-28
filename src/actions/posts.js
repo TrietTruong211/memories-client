@@ -5,15 +5,31 @@ import {
   UPDATE,
   LIKE,
   DELETE,
+  FETCH_BY_SEARCH,
+  START_LOADING,
+  END_LOADING,
+  FETCH_POST,
+  COMMENT,
 } from "../constants/actionTypes";
 
 // Action creators
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
   //dealing with async data
   try {
+    dispatch({ type: START_LOADING });
+
     // const response = ....
-    const { data } = await api.fetchPosts(); //getting response, the response always have data object (data here represents posts)
-    dispatch({ type: FETCH_ALL, payload: data }); //refactored to this one line
+    const {
+      data: { data, currentPage, numberOfPages },
+    } = await api.fetchPosts(page); //getting response, the response always have data object (data here represents posts)
+    console.log("Actions getPosts");
+    console.log(data);
+    dispatch({
+      type: FETCH_ALL,
+      payload: { data, currentPage, numberOfPages },
+    }); //refactored to this one line
+
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
@@ -22,11 +38,45 @@ export const getPosts = () => async (dispatch) => {
   // // return the action
   // dispatch(action); //refeactored
 };
-
-export const createPost = (post) => async (dispatch) => {
+export const getPost = (id) => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.fetchPost(id); //getting response, the response always have data object (data here represents posts)
+    // console.log("Get Post Action");
+    // console.log(data);
+    dispatch({
+      type: FETCH_POST,
+      payload: data,
+    }); //refactored to this one line
+
+    dispatch({ type: END_LOADING });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    const {
+      data: { data },
+    } = await api.fetchPostsBySearch(searchQuery);
+    console.log("Actions search");
+    console.log(data);
+    dispatch({ type: FETCH_BY_SEARCH, payload: data });
+    dispatch({ type: END_LOADING });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createPost = (post, navigate) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
     const { data } = await api.createPost(post);
     dispatch({ type: CREATE, payload: data });
+    navigate(`/posts/${data._id}`);
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
@@ -54,6 +104,16 @@ export const likePost = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id);
     dispatch({ type: LIKE, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const commentPost = (comment, id) => async (dispatch) => {
+  try {
+    const { data } = await api.comment(comment, id);
+    dispatch({ type: COMMENT, payload: data });
+    return data.comments;
   } catch (error) {
     console.log(error);
   }

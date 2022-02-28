@@ -1,21 +1,21 @@
 import { makeStyles } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
-  appBar: {
-    borderRadius: 15,
-    margin: "30px 0",
+  appBarSearch: {
+    borderRadius: 4,
+    marginBottom: "1rem",
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    padding: "16px",
   },
-  heading: {
-    color: "rgba(0,183,255, 1)",
-    fontWeight: "bold",
-    fontSize: "2rem",
+  pagination: {
+    borderRadius: 4,
+    marginTop: "1rem",
+    padding: "16px",
   },
-  image: {
-    marginLeft: "15px",
+  gridContainer: {
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column-reverse",
+    },
   },
   [theme.breakpoints.down("sm")]: {
     //if it's a small screen, then apply the style

@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "./Post/Post";
-import useStyles from "../../styles";
+import useStyles from "./stylesPosts";
 
 // use selector to access the store (global state)
 import { useSelector } from "react-redux";
@@ -11,11 +11,14 @@ const Posts = ({ setCurrentId }) => {
   const classes = useStyles();
   // Use selector to get data
   // "posts" comes from the reducers
-  const posts = useSelector((state) => state.posts);
+  // const posts = useSelector((state) => state.posts); //used to have array of posts, now have an object with posts in it
+  const { posts, isLoading } = useSelector((state) => state.posts); //destructuring because state has been refactored
+  console.log("Component posts");
+  console.log(posts);
 
-  // console.log(posts);
+  if (!posts?.length && !isLoading) return "No posts";
 
-  return !posts.length ? (
+  return isLoading ? (
     <CircularProgress />
   ) : (
     <Grid
@@ -24,8 +27,8 @@ const Posts = ({ setCurrentId }) => {
       alignItems="stretch"
       spacing={3}
     >
-      {posts.map((post) => (
-        <Grid key={post.id} item xs={12} sm={6}>
+      {posts?.map((post) => (
+        <Grid key={post.id} item xs={12} md={6} sm={12} lg={3}>
           <Post post={post} setCurrentId={setCurrentId} />
         </Grid>
       ))}
