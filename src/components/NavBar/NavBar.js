@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
 
 import useStyles from "./stylesNavbar";
-import memories from "../../images/memories.png";
+import memories from "../../images/memories-logo.jpg";
 
 const NavBar = () => {
   const classes = useStyles();
@@ -39,17 +39,17 @@ const NavBar = () => {
           component={Link}
           to="/"
           className={classes.heading}
-          variant="h2"
+          // variant="h2"
           align="center"
         >
-          Memories
+          {/* Memories */}
+          <img
+            className={classes.image}
+            src={memories}
+            alt="memories"
+            height="80"
+          />
         </Typography>
-        <img
-          className={classes.image}
-          src={memories}
-          alt="memories"
-          height="60"
-        />
       </div>
       <Toolbar className={classes.toolbar}>
         {user ? (

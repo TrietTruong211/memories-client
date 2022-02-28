@@ -13,8 +13,6 @@ const Posts = ({ setCurrentId }) => {
   // "posts" comes from the reducers
   // const posts = useSelector((state) => state.posts); //used to have array of posts, now have an object with posts in it
   const { posts, isLoading } = useSelector((state) => state.posts); //destructuring because state has been refactored
-  console.log("Component posts");
-  console.log(posts);
 
   if (!posts?.length && !isLoading) return "No posts";
 

@@ -33,11 +33,6 @@ const Form = ({ currentId, setCurrentId }) => {
     currentId ? state?.posts?.posts?.find((p) => p._id === currentId) : null
   );
 
-  // const temp = useSelector((state) => (currentId ? state : null));
-
-  console.log("FORM");
-  console.log(post);
-
   //when post value changes, fill values in form with data from post
   useEffect(() => {
     if (post) setPostData(post);

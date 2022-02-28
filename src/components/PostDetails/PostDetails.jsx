@@ -20,6 +20,9 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const maxChunkRecommendedPost = 3;
+  const maxCharRecommendedPost = 200;
+
   // Get a single post
   useEffect(() => {
     dispatch(getPost(id));
@@ -31,16 +34,21 @@ const PostDetails = () => {
       dispatch(
         getPostsBySearch({ search: "none", tags: post?.tags.join(",") })
       );
-      console.log("Posts");
-      console.log(posts);
     }
   }, [post]);
-  console.log("Post details");
-  console.log(post);
 
   const recommendedPosts = post && posts.filter(({ _id }) => _id !== post._id); //excluding the current post from the list of posts to get the recommended post
-  console.log("Recommended post");
-  console.log(recommendedPosts);
+  const recommendedPostsCarousel = [];
+  var i, j, temp;
+  for (
+    i = 0, j = recommendedPosts.length;
+    i < j;
+    i += maxChunkRecommendedPost
+  ) {
+    temp = recommendedPosts.slice(i, i + maxChunkRecommendedPost);
+    recommendedPostsCarousel.push(temp);
+  }
+  console.log(recommendedPostsCarousel);
 
   const openPost = (_id) => navigate(`/posts/${_id}`);
 
@@ -104,34 +112,51 @@ const PostDetails = () => {
             You might also like:{" "}
           </Typography>
           <Divider />
-          {/* <div className={classes.recommendedPosts}> */}
-          <Carousel>
-            {recommendedPosts?.map(
-              ({ title, message, name, likes, selectedFile, _id }) => (
-                <div
-                  style={{ margin: "20px", cursor: "pointer" }}
-                  onClick={() => openPost(_id)}
-                  key={_id}
-                >
-                  <Typography gutterBottom variant="h6">
-                    {title}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle2">
-                    {name}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle2">
-                    {message}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle1">
-                    Likes: {likes.length}
-                  </Typography>
-                  <img src={selectedFile} width="200px" alt={title} />
-                </div>
-              )
-            )}
+          <Carousel
+            autoPlay={false}
+            fullHeightHover={true}
+            indicatorContainerProps={{
+              style: {
+                marginTop: "50px",
+              },
+            }}
+          >
+            {recommendedPostsCarousel?.map((smallerChunk) => (
+              <div style={{ display: "flex", margin: "0px 50px" }}>
+                {smallerChunk?.map(
+                  ({ title, message, name, likes, selectedFile, _id }) => (
+                    <div
+                      style={{ margin: "20px", cursor: "pointer" }}
+                      onClick={() => openPost(_id)}
+                      key={_id}
+                    >
+                      <Typography gutterBottom variant="h6">
+                        {title}
+                      </Typography>
+                      <Typography gutterBottom variant="subtitle2">
+                        {name}
+                      </Typography>
+                      <Typography gutterBottom variant="subtitle2">
+                        {message.length > maxCharRecommendedPost
+                          ? message.slice(0, maxCharRecommendedPost) + ` ...`
+                          : message}
+                      </Typography>
+                      <Typography gutterBottom variant="subtitle1">
+                        Likes: {likes.length}
+                      </Typography>
+                      <img
+                        src={selectedFile}
+                        width="100%"
+                        alt={title}
+                        style={{ maxHeight: "300px" }}
+                      />
+                    </div>
+                  )
+                )}
+              </div>
+            ))}
           </Carousel>
         </div>
-        // </div>
       )}
     </Paper>
   );

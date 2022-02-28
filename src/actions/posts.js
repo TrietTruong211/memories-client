@@ -22,8 +22,7 @@ export const getPosts = (page) => async (dispatch) => {
     const {
       data: { data, currentPage, numberOfPages },
     } = await api.fetchPosts(page); //getting response, the response always have data object (data here represents posts)
-    console.log("Actions getPosts");
-    console.log(data);
+
     dispatch({
       type: FETCH_ALL,
       payload: { data, currentPage, numberOfPages },
@@ -42,8 +41,7 @@ export const getPost = (id) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.fetchPost(id); //getting response, the response always have data object (data here represents posts)
-    // console.log("Get Post Action");
-    // console.log(data);
+
     dispatch({
       type: FETCH_POST,
       payload: data,
@@ -61,8 +59,6 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
     const {
       data: { data },
     } = await api.fetchPostsBySearch(searchQuery);
-    console.log("Actions search");
-    console.log(data);
     dispatch({ type: FETCH_BY_SEARCH, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {

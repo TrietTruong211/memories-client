@@ -20,8 +20,6 @@ const CommentSection = ({ post }) => {
     commentsRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  console.log("Comment section");
-  console.log(post);
   return (
     <div>
       <div className={classes.commentsOuterContainer}>
