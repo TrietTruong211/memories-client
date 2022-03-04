@@ -12,6 +12,7 @@ import useStyles from "./stylesPostDetails";
 import { getPost, getPostsBySearch } from "../../actions/posts";
 import Carousel from "react-material-ui-carousel";
 import CommentSection from "./CommentSection";
+import Chat from "./Chat";
 
 const PostDetails = () => {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
@@ -41,14 +42,14 @@ const PostDetails = () => {
   const recommendedPostsCarousel = [];
   var i, j, temp;
   for (
-    i = 0, j = recommendedPosts.length;
+    i = 0, j = recommendedPosts?.length;
     i < j;
     i += maxChunkRecommendedPost
   ) {
     temp = recommendedPosts.slice(i, i + maxChunkRecommendedPost);
     recommendedPostsCarousel.push(temp);
   }
-  console.log(recommendedPostsCarousel);
+  // console.log(recommendedPostsCarousel);
 
   const openPost = (_id) => navigate(`/posts/${_id}`);
 
@@ -61,7 +62,7 @@ const PostDetails = () => {
       </Paper>
     );
   }
-  console.log(post);
+  // console.log(post);
 
   return (
     <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -86,9 +87,8 @@ const PostDetails = () => {
             {moment(post?.createdAt).fromNow()}
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
+          {/* REAL TIME CHAT */}
+          <Chat post={post} />
           <Divider style={{ margin: "20px 0" }} />
           <CommentSection post={post} />
           <Divider style={{ margin: "20px 0" }} />

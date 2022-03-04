@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar/NavBar";
 import Home from "./components/Home/Home";
 import Auth from "./components/Auth/Auth";
 import PostDetails from "./components/PostDetails/PostDetails";
+// import Chat from "./components/Chat/Chat";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -20,12 +21,8 @@ const App = () => {
           <Route path="/posts" exact element={<Home />} />
           <Route path="/posts/search" exact element={<Home />} />
           <Route path="/posts/:id" element={<PostDetails />} />
-          <Route path="/auth" exact element={<Auth />} />
-          {/* <Route
-            path="/auth"
-            exact
-            element={!user ? <Auth /> : <Navigate to="/posts" />}
-          /> */}
+          <Route path="/auth" exact element={!user ? <Auth /> : <Home />} />
+          {/* <Route path="/chat" exact element={<Chat />} /> */}
         </Routes>
       </Container>
     </BrowserRouter>
